@@ -4,8 +4,6 @@ from pymongo.database import Database
 from pymongo.collection import Collection
 from config import settings
 
-# /mnt/d/Lab/portfolio-fastapi/db.py
-
 MONGO_DB_URL = getattr(settings, "MONGO_DB_URL")
 MONGO_DB_NAME = getattr(settings, "MONGO_DB_NAME")
 MONGO_COLLECTION_NAME = getattr(settings, "MONGO_COLLECTION_NAME")
@@ -21,9 +19,7 @@ def connect() -> MongoClient:
     global _client, _db
     if _client is None:
         _client = MongoClient(MONGO_DB_URL, serverSelectionTimeoutMS=5000)
-        # quick ping to raise early if connection fails
         _client.admin.command("ping")
-        # prefer DB embedded in the URL, otherwise use MONGO_DB_NAME
         try:
             _db = _client.get_default_database()
         except Exception:
@@ -45,7 +41,8 @@ def get_profiles_collection() -> Collection:
     Return the 'profiles' collection from the configured database.
     """
     db = get_database()
-    return db[MONGO_COLLECTION_NAME]
+    coll = db[MONGO_COLLECTION_NAME]
+    return coll
 
 def close() -> None:
     """
@@ -56,15 +53,3 @@ def close() -> None:
         _client.close()
         _client = None
         _db = None
-
-# Optional small helper to attach to a FastAPI app:
-def attach_fastapi_events(app):
-    @app.on_event("startup")
-    def _startup():
-        connect()
-
-    @app.on_event("shutdown")
-    def _shutdown():
-        close()
-
-    return app

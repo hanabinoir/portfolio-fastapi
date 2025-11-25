@@ -1,4 +1,3 @@
-# ...existing code...
 from typing import Any,  Annotated, List, Optional, Literal
 from pydantic import BaseModel, Field
 from bson import ObjectId
@@ -8,18 +7,17 @@ PyObjectId = Annotated[str, BeforeValidator(str)]
 
 
 class ProfileIntro(BaseModel):
-    id: Optional[PyObjectId] = Field(default=None, alias="_id")
+    id: PyObjectId = Field(alias="_id")
     name: str
-    name_jp: Optional[str] = None
-    avatar_url: Optional[str] = None
+    name_jp: str = None
+    avatar_url: str = None
     headlines: List[str] = Field(default_factory=list)
     skills: List[str] = Field(default_factory=list)
     type: Literal["INTRO"] = "INTRO"
 
     class Config:
         validate_by_name = True
-        json_schema_extra = True
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "_id": "691d7626fb1ba4c98abbf07e",
                 "name": "Vincent Shum",

@@ -1,10 +1,17 @@
 from fastapi import FastAPI, HTTPException
-from db import attach_fastapi_events, get_profiles_collection
+from db import connect, close, get_profiles_collection
 from models.mongo_models import ProfileIntro
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    connect() 
+    
+    yield  # The application runs here
+    
+    close()
 
-attach_fastapi_events(app)
+app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def read_root():
@@ -18,8 +25,3 @@ async def read_profile():
         raise HTTPException(status_code=404, detail="Profile not found")
     return doc
 
-@app.get("/profiles", response_model=list[ProfileIntro])
-def read_profiles():
-    coll = get_profiles_collection()
-    docs = coll.find()
-    return list(docs)
