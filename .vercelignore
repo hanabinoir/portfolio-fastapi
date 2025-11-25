@@ -1,0 +1,15 @@
+.git
+.gitignore
+README.md
+.env.local
+.env.*.local
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.pytest_cache
+.venv
+venv
+env
+.DS_Store
+.vercelignore
