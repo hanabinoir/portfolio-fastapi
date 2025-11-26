@@ -1,27 +1,35 @@
-from fastapi import FastAPI, HTTPException
-from db import connect, close, get_profiles_collection
+from fastapi import FastAPI, HTTPException, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session as DBSession
+
+from models.pg_models import User
+from db import mongodb, pg_db
+from db.mongodb import get_profiles_collection
 from models.mongo_models import ProfileIntro
 from contextlib import asynccontextmanager
+from passlib.context import CryptContext
+from utils.auth import create_session, require_admin
+from config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    connect() 
+    mongodb.connect() 
+    pg_db.connect()
     
     yield  # The application runs here
     
-    close()
-
+    mongodb.close()
+    pg_db.close()
 app = FastAPI(lifespan=lifespan)
+
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"hint": "Try it under /docs."}
 
-@app.get("/profile", response_model=ProfileIntro)
-async def read_profile():
-    coll = get_profiles_collection()
-    doc = coll.find_one({"type": "INTRO"})
-    if not doc:
-        raise HTTPException(status_code=404, detail="Profile not found")
-    return doc
+# Register feature routers
+from routers import auth as auth_router
+from routers import profile as profile_router
 
+app.include_router(auth_router.router)
+app.include_router(profile_router.router)
