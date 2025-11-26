@@ -1,15 +1,7 @@
-from fastapi import FastAPI, HTTPException, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session as DBSession
+from fastapi import FastAPI
 
-from models.pg_models import User
 from db import mongodb, pg_db
-from db.mongodb import get_profiles_collection
-from models.mongo_models import ProfileIntro
 from contextlib import asynccontextmanager
-from passlib.context import CryptContext
-from utils.auth import create_session, require_admin
-from config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
