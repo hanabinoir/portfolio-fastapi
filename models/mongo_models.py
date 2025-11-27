@@ -9,8 +9,10 @@ PyObjectId = Annotated[str, BeforeValidator(str)]
 class ProfileIntro(BaseModel):
     id: PyObjectId = Field(alias="_id")
     name: str
-    name_jp: str = None
-    avatar_url: str = None
+    name_jp: str
+    avatar_url: str
+    github_url: str
+    linkedin_url: str
     headlines: List[str] = Field(default_factory=list)
     skills: List[str] = Field(default_factory=list)
     type: Literal["INTRO"] = "INTRO"
