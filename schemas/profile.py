@@ -1,5 +1,5 @@
 from typing import List, Optional, Literal, Annotated
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from pydantic.functional_validators import BeforeValidator
 
 PyObjectId = Annotated[str, BeforeValidator(str)]
@@ -15,7 +15,7 @@ class ProfileIntroRequest(BaseModel):
     headlines: List[str] = Field(default_factory=list)
     skills: List[str] = Field(default_factory=list)
 
-    class Config:
+    model_config = ConfigDict(
         json_schema_extra = {
             "example": {
                 "name": "Vincent Shum",
@@ -26,7 +26,7 @@ class ProfileIntroRequest(BaseModel):
                 "headlines": ["Mobile Developer", "Web Developer"],
                 "skills": ["Kotlin", "Swift", "JavaScript"],
             }
-        }
+        })
 
 
 class ProfileIntroResponse(BaseModel):
@@ -41,8 +41,8 @@ class ProfileIntroResponse(BaseModel):
     skills: List[str]
     type: Literal["INTRO"] = "INTRO"
 
-    class Config:
-        validate_by_name = True
+    model_config = ConfigDict(
+        validate_by_name = True,
         json_schema_extra = {
             "example": {
                 "_id": "691d7626fb1ba4c98abbf07e",
@@ -55,7 +55,7 @@ class ProfileIntroResponse(BaseModel):
                 "skills": ["Kotlin", "Swift", "JavaScript", "Jetpack Compose", "SwiftUI"],
                 "type": "INTRO",
             }
-        }
+        })
 
 
 class ProfileUpdateResponse(BaseModel):
@@ -63,10 +63,10 @@ class ProfileUpdateResponse(BaseModel):
     message: str
     modified_count: int
 
-    class Config:
+    model_config = ConfigDict(
         json_schema_extra = {
             "example": {
                 "message": "Profile updated successfully",
                 "modified_count": 1,
             }
-        }
+        })

@@ -1,6 +1,5 @@
-from typing import Any,  Annotated, List, Optional, Literal
+from typing import Annotated, List, Literal
 from pydantic import BaseModel, Field
-from bson import ObjectId
 from pydantic.functional_validators import BeforeValidator
 
 PyObjectId = Annotated[str, BeforeValidator(str)]

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class LoginRequest(BaseModel):
@@ -14,7 +14,7 @@ class LoginResponse(BaseModel):
     user_id: int
     username: str
 
-    class Config:
+    model_config = ConfigDict(
         json_schema_extra = {
             "example": {
                 "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -22,4 +22,4 @@ class LoginResponse(BaseModel):
                 "user_id": 1,
                 "username": "admin@example.com",
             }
-        }
+        })
