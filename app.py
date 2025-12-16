@@ -22,6 +22,8 @@ def read_root():
 # Register feature routers
 from routers import auth as auth_router
 from routers import profile as profile_router
+from routers import projects as project_router
 
 app.include_router(auth_router.router)
 app.include_router(profile_router.router)
+app.include_router(project_router.router)

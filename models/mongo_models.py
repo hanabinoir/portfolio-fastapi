@@ -1,4 +1,5 @@
-from typing import List, Literal
+from datetime import datetime
+from typing import Any, List, Literal, Optional
 from pydantic import BaseModel, Field
 
 
@@ -13,6 +14,31 @@ class ProfileIntroBase(BaseModel):
     type: Literal["INTRO"] = "INTRO"
 
     class Config:
-        validate_by_name = True
+        populate_by_name = True
 
         
+class Company(BaseModel):
+    name: str
+    url: Optional[str] = None
+
+class TechStack(BaseModel):
+    languages: List[str] = Field(default_factory=list)
+    frameworks: List[str] = Field(default_factory=list)
+    libraries: List[str] = Field(default_factory=list)
+    platforms: List[str] = Field(default_factory=list)
+
+
+class Timeline(BaseModel):
+    started_at: datetime
+    ended_at: Optional[datetime] = None
+
+
+class ProjectBase(BaseModel):
+    name: str
+    description: str
+    company: Optional[Company] = None
+    timeline: Timeline
+    tech_stack: TechStack
+
+    class Config:
+        populate_by_name = True
