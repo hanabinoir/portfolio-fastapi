@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from db.mongodb import get_profiles_collection
-from schemas.profile import ProfileIntroRequest
+from schemas.profile import ProfileIntroUpdate
 
 
 def get_profile_intro():
@@ -12,7 +12,7 @@ def get_profile_intro():
     return doc
 
 
-def update_profile_intro(updated_profile: ProfileIntroRequest):
+def update_profile_intro(updated_profile: ProfileIntroUpdate):
     """Update the profile intro document in MongoDB."""
     coll = get_profiles_collection()
     data = updated_profile.model_dump(by_alias=True, exclude_none=True)

@@ -1,13 +1,8 @@
-from typing import Any,  Annotated, List, Optional, Literal
+from typing import List, Literal
 from pydantic import BaseModel, Field
-from bson import ObjectId
-from pydantic.functional_validators import BeforeValidator
-
-PyObjectId = Annotated[str, BeforeValidator(str)]
 
 
-class ProfileIntro(BaseModel):
-    id: PyObjectId = Field(alias="_id")
+class ProfileIntroBase(BaseModel):
     name: str
     name_jp: str
     avatar_url: str
@@ -19,16 +14,5 @@ class ProfileIntro(BaseModel):
 
     class Config:
         validate_by_name = True
-        json_schema_extra = {
-            "example": {
-                "_id": "691d7626fb1ba4c98abbf07e",
-                "name": "Vincent Shum",
-                "name_jp": "シミズ　ヒロシ",
-                "avatar_url": "https://res.cloudinary.com/hanabinoir/image/upload/v1763521930/portfolio/profile_avatar_cyber_punk_jgox1y.png",
-                "headlines": ["Mobile Developer", "Web Developer"],
-                "skills": ["Kotlin", "Swift", "JavaScript", "Jetpack Compose", "SwiftUI"],
-                "type": "INTRO",
-            }
-        }
 
         
