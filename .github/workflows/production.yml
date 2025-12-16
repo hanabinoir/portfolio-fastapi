@@ -30,8 +30,8 @@ jobs:
 
       - name: Run tests
         run: |
-          # Load environment variables from .vercel/.env.preview.local and run pytest
-          if [ -f .vercel/.env.preview.local ]; then set -a; source .vercel/.env.preview.local; set +a; fi
+          # Safely load environment variables from .vercel/.env.preview.local and run pytest
+          if [ -f .vercel/.env.preview.local ]; then export $(grep -v '^#' .vercel/.env.preview.local | xargs); fi
           pytest
 
   deploy-production:
