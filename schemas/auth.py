@@ -23,3 +23,27 @@ class LoginResponse(BaseModel):
                 "username": "admin@example.com",
             }
         }
+
+
+class CreateUserRequest(BaseModel):
+    """Schema for creating a new user."""
+    username: str
+    password: str
+
+
+class CreateUserResponse(BaseModel):
+    """Response returned after creating a user (includes access token)."""
+    access_token: str
+    token_type: str
+    user_id: int
+    username: str
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                "token_type": "bearer",
+                "user_id": 2,
+                "username": "user@example.com",
+            }
+        }

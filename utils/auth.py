@@ -7,7 +7,7 @@ import pytz
 
 from models.pg_models import Session, User
 from db import pg_db
-from config import settings
+from utils.role import RoleName
 
 SESSION_DAYS = 14
 
@@ -46,14 +46,7 @@ def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired session"
         )
-    
-    ## Admin user handling
-    user_id = session.user_id
-    admin_id = getattr(settings, "ADMIN_ID", 0)
-    if user_id == admin_id:
-        return User(id=admin_id, username="admin", hashed_password="")
 
-    ## Normal user handling
     user = session.user
     if not user:
         raise HTTPException(status_code=400, detail="Invalid user")
@@ -61,14 +54,7 @@ def get_current_user(
     return user
 
 def require_admin(user: User = Depends(get_current_user)):
-    ## Admin user check
-    if user.username == "admin":
-        return user
-
-    ## Normal user check
-    role_names = {role.name.lower() for role in user.roles}
-
-    if "admin" not in role_names:
+    if RoleName.ADMIN not in [role.name for role in user.roles]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin privileges required"

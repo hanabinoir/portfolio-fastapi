@@ -7,8 +7,6 @@ class Settings(BaseSettings):
     MONGO_COLL_PROFILES: str = "profiles"
     MONGO_COLL_PROJECTS: str = "projects"
     PG_DATABASE_URL: str
-    ADMIN_EMAILS: list[str]
-    ADMIN_ID: int
 
     model_config = SettingsConfigDict(env_file=".env")
 
