@@ -1,58 +1,45 @@
-from typing import List, Optional, Literal, Annotated
+from typing import Annotated
 from pydantic import BaseModel, Field
 from pydantic.functional_validators import BeforeValidator
+
+from models.mongo_models import ProfileIntroBase
 
 PyObjectId = Annotated[str, BeforeValidator(str)]
 
 
-class ProfileIntroRequest(BaseModel):
+class ProfileIntroUpdate(ProfileIntroBase):
     """Profile intro update request schema (excludes _id)."""
-    name: Optional[str] = None
-    name_jp: Optional[str] = None
-    avatar_url: Optional[str] = None
-    github_url: Optional[str] = None
-    linkedin_url: Optional[str] = None
-    headlines: List[str] = Field(default_factory=list)
-    skills: List[str] = Field(default_factory=list)
 
     class Config:
         json_schema_extra = {
             "example": {
-                "name": "Vincent Shum",
-                "name_jp": "シミズ　ヒロシ",
+                "name": "Lorem Ipsum",
+                "name_jp": "イロハニホヘト",
                 "avatar_url": "https://example.com/avatar.png",
                 "github_url": "https://github.com/user",
                 "linkedin_url": "https://linkedin.com/in/user",
-                "headlines": ["Mobile Developer", "Web Developer"],
-                "skills": ["Kotlin", "Swift", "JavaScript"],
+                "headlines": ["Position 1", "Position 2"],
+                "skills": ["Skill 1", "Skill 2", "Skill 3"],
+                "type": "INTRO",
             }
         }
 
 
-class ProfileIntroResponse(BaseModel):
+class ProfileIntro(ProfileIntroBase):
     """Profile intro response schema."""
     id: PyObjectId = Field(alias="_id")
-    name: str
-    name_jp: str
-    avatar_url: str
-    github_url: str
-    linkedin_url: str
-    headlines: List[str]
-    skills: List[str]
-    type: Literal["INTRO"] = "INTRO"
 
     class Config:
-        validate_by_name = True
         json_schema_extra = {
             "example": {
                 "_id": "691d7626fb1ba4c98abbf07e",
-                "name": "Vincent Shum",
-                "name_jp": "シミズ　ヒロシ",
-                "avatar_url": "https://res.cloudinary.com/hanabinoir/image/upload/v1763521930/portfolio/profile_avatar_cyber_punk_jgox1y.png",
-                "github_url": "https://github.com/hanabinoir",
-                "linkedin_url": "https://linkedin.com/in/vincent",
-                "headlines": ["Mobile Developer", "Web Developer"],
-                "skills": ["Kotlin", "Swift", "JavaScript", "Jetpack Compose", "SwiftUI"],
+                "name": "Lorem Ipsum",
+                "name_jp": "イロハニホヘト",
+                "avatar_url": "https://example.com/avatar.png",
+                "github_url": "https://github.com/user",
+                "linkedin_url": "https://linkedin.com/in/user",
+                "headlines": ["Assassin", "Wizard"],
+                "skills": ["Skill 1", "Skill 2", "Skill 3"],
                 "type": "INTRO",
             }
         }

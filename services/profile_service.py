@@ -1,4 +1,4 @@
-from schemas.profile import ProfileIntroRequest
+from schemas.profile import ProfileIntroUpdate
 from repositories.profile_repo import get_profile_intro, update_profile_intro
 
 
@@ -7,6 +7,6 @@ def get_profile():
     return get_profile_intro()
 
 
-def update_profile(updated_profile: ProfileIntroRequest):
+def update_profile(updated_profile: ProfileIntroUpdate):
     """Update the profile intro."""
     return update_profile_intro(updated_profile)

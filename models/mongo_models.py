@@ -1,13 +1,9 @@
-from typing import Any,  Annotated, List, Optional, Literal
+from datetime import datetime
+from typing import Any, List, Literal, Optional
 from pydantic import BaseModel, Field
-from bson import ObjectId
-from pydantic.functional_validators import BeforeValidator
-
-PyObjectId = Annotated[str, BeforeValidator(str)]
 
 
-class ProfileIntro(BaseModel):
-    id: PyObjectId = Field(alias="_id")
+class ProfileIntroBase(BaseModel):
     name: str
     name_jp: str
     avatar_url: str
@@ -18,17 +14,31 @@ class ProfileIntro(BaseModel):
     type: Literal["INTRO"] = "INTRO"
 
     class Config:
-        validate_by_name = True
-        json_schema_extra = {
-            "example": {
-                "_id": "691d7626fb1ba4c98abbf07e",
-                "name": "Vincent Shum",
-                "name_jp": "シミズ　ヒロシ",
-                "avatar_url": "https://res.cloudinary.com/hanabinoir/image/upload/v1763521930/portfolio/profile_avatar_cyber_punk_jgox1y.png",
-                "headlines": ["Mobile Developer", "Web Developer"],
-                "skills": ["Kotlin", "Swift", "JavaScript", "Jetpack Compose", "SwiftUI"],
-                "type": "INTRO",
-            }
-        }
+        populate_by_name = True
 
         
+class Company(BaseModel):
+    name: str
+    url: Optional[str] = None
+
+class TechStack(BaseModel):
+    languages: List[str] = Field(default_factory=list)
+    frameworks: List[str] = Field(default_factory=list)
+    libraries: List[str] = Field(default_factory=list)
+    platforms: List[str] = Field(default_factory=list)
+
+
+class Timeline(BaseModel):
+    started_at: datetime
+    ended_at: Optional[datetime] = None
+
+
+class ProjectBase(BaseModel):
+    name: str
+    description: str
+    company: Optional[Company] = None
+    timeline: Timeline
+    tech_stack: TechStack
+
+    class Config:
+        populate_by_name = True

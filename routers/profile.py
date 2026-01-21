@@ -3,12 +3,12 @@ from models.pg_models import User
 
 from utils.auth import require_admin
 from services.profile_service import get_profile, update_profile
-from schemas.profile import ProfileIntroResponse, ProfileIntroRequest, ProfileUpdateResponse
+from schemas.profile import ProfileIntro, ProfileIntroUpdate, ProfileUpdateResponse
 
 router = APIRouter()
 
 
-@router.get("/profile", response_model=ProfileIntroResponse)
+@router.get("/profile", response_model=ProfileIntro)
 def read_profile():
     """Fetch the profile intro."""
     return get_profile()
@@ -16,7 +16,7 @@ def read_profile():
 
 @router.post("/profile/edit", response_model=ProfileUpdateResponse)
 def edit_profile(
-    updated_profile: ProfileIntroRequest,
+    updated_profile: ProfileIntroUpdate,
     admin_user: User = Depends(require_admin)
 ):
     """Update the profile intro. Requires admin privileges."""

@@ -6,7 +6,8 @@ from config import settings
 
 MONGO_DB_URL = getattr(settings, "MONGO_DB_URL")
 MONGO_DB_NAME = getattr(settings, "MONGO_DB_NAME")
-MONGO_COLLECTION_NAME = getattr(settings, "MONGO_COLLECTION_NAME")
+COLL_PROFILES = getattr(settings, "MONGO_COLL_PROFILES")
+COLL_PROJECTS = getattr(settings, "MONGO_COLL_PROJECTS")
     
 
 _client: Optional[MongoClient] = None
@@ -41,7 +42,15 @@ def get_profiles_collection() -> Collection:
     Return the 'profiles' collection from the configured database.
     """
     db = get_database()
-    coll = db[MONGO_COLLECTION_NAME]
+    coll = db[COLL_PROFILES]
+    return coll
+
+def get_projects_collection() -> Collection:
+    """
+    Return the 'projects' collection from the configured database.
+    """
+    db = get_database()
+    coll = db[COLL_PROJECTS]
     return coll
 
 def close() -> None:
