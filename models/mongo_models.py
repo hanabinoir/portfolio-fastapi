@@ -3,7 +3,7 @@ from typing import Any, List, Literal, Optional
 from pydantic import BaseModel, Field
 
 
-class ProfileIntroBase(BaseModel):
+class ProfileBase(BaseModel):
     name: str
     name_jp: str
     avatar_url: str
@@ -11,12 +11,11 @@ class ProfileIntroBase(BaseModel):
     linkedin_url: str
     headlines: List[str] = Field(default_factory=list)
     skills: List[str] = Field(default_factory=list)
-    type: Literal["INTRO"] = "INTRO"
 
     class Config:
         populate_by_name = True
 
-        
+
 class Company(BaseModel):
     name: str
     url: Optional[str] = None
