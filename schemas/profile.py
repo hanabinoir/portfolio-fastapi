@@ -2,13 +2,13 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 from pydantic.functional_validators import BeforeValidator
 
-from models.mongo_models import ProfileIntroBase
+from models.mongo_models import ProfileBase
 
 PyObjectId = Annotated[str, BeforeValidator(str)]
 
 
-class ProfileIntroUpdate(ProfileIntroBase):
-    """Profile intro update request schema (excludes _id)."""
+class ProfileUpdate(ProfileBase):
+    """Profile update request schema (excludes _id)."""
 
     class Config:
         json_schema_extra = {
@@ -20,13 +20,12 @@ class ProfileIntroUpdate(ProfileIntroBase):
                 "linkedin_url": "https://linkedin.com/in/user",
                 "headlines": ["Position 1", "Position 2"],
                 "skills": ["Skill 1", "Skill 2", "Skill 3"],
-                "type": "INTRO",
             }
         }
 
 
-class ProfileIntro(ProfileIntroBase):
-    """Profile intro response schema."""
+class Profile(ProfileBase):
+    """Profile response schema."""
     id: PyObjectId = Field(alias="_id")
 
     class Config:
@@ -40,7 +39,6 @@ class ProfileIntro(ProfileIntroBase):
                 "linkedin_url": "https://linkedin.com/in/user",
                 "headlines": ["Assassin", "Wizard"],
                 "skills": ["Skill 1", "Skill 2", "Skill 3"],
-                "type": "INTRO",
             }
         }
 
